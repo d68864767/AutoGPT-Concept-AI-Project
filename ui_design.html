@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoGPT Concept AI Project</title>
+    <link rel="stylesheet" href="ui_design.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>AutoGPT Concept AI Project</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Enter your task</h2>
+            <form id="task-form">
+                <label for="task">Choose a task:</label>
+                <select id="task" name="task">
+                    <option value="task1">Task 1</option>
+                    <option value="task2">Task 2</option>
+                    <option value="task3">Task 3</option>
+                </select>
+                <label for="input-text">Input Text:</label>
+                <textarea id="input-text" name="input-text" rows="4" cols="50"></textarea>
+                <input type="submit" value="Submit">
+            </form>
+        </section>
+        <section>
+            <h2>Output</h2>
+            <div id="output-text"></div>
+        </section>
+    </main>
+    <script>
+        $(document).ready(function(){
+            $("#task-form").submit(function(event){
+                event.preventDefault();
+                var task = $("#task").val();
+                var inputText = $("#input-text").val();
+                $.ajax({
+                    url: '/api/autogpt',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({task: task, input_text: inputText}),
+                    success: function(response){
+                        $("#output-text").text(response.output_text);
+                    },
+                    error: function(error){
+                        $("#output-text").text(error.responseJSON.error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
